@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -62,8 +63,22 @@ public class App extends Application {
         ImageView fondo2View = new ImageView(fondo2);
         fondo2View.setLayoutX(fondo2x);
         
+        Rectangle plataforma = new Rectangle(500,450,60,60);
+        plataforma.setFill(Color.BLACK);
+        
+        Polygon triangulo = new Polygon();
+        triangulo.getPoints().addAll(new Double[]{
+        450.0, 500.0,
+        480.0, 584.0,
+        420.0, 584.0 });
+        triangulo.setFill(Color.GOLD);
+        
         root.getChildren().add(fondoView);
         root.getChildren().add(fondo2View);
+        
+        root.getChildren().add(triangulo);
+        
+        root.getChildren().add(plataforma);
         
         Group groupPersonaje = new Group();
         groupPersonaje.getChildren().add(cubo);
@@ -83,7 +98,7 @@ public class App extends Application {
         //groupPersonaje.setTranslateY(posicionCuboY);
             posicionCuboX += velocidadCubo;
             //System.out.println(posicionCuboX);
-            System.out.println(posicionCuboX);
+            
         if (posicionCuboY == 535){
             //groupPersonaje.setTranslateY(posicionCuboY);
             posicionCuboY += movimientoCuboY;
@@ -94,12 +109,13 @@ public class App extends Application {
             posicionCuboY += 2;
             //System.out.println(posicionCuboY);
         }
-        if (posicionCuboX > 700){
-            fondoView.setLayoutX(800);
-            fondo2View.setLayoutX(0);
-            posicionCuboX = 0-100;
-            System.out.println(fondo2x);
-            }
+        //if (posicionCuboX > 100){
+            //fondo2x -=10;
+            //System.out.println(fondo2x);
+            //}
+        //if (fondo2x == -800) {
+            //fondo2x = 0;
+        //}
             
         })
         );
@@ -112,7 +128,7 @@ public class App extends Application {
             switch(event.getCode()){
                 case SPACE:
                     if (posicionCuboY == 535){
-                    movimientoCuboY -=100;
+                    movimientoCuboY -=150;
                     }
                     //posicionCuboY += movimientoCuboY;
                     //System.out.println(posicionCuboY);
