@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -32,7 +33,9 @@ public class App extends Application {
     int fondo2x = 800;
     int posicionplataformaX= 480;
     int posicionplataformaY= 450;
-    int posicionCuboYMovimiento = 2;
+    int posicionCuboYMovimiento = 0;
+    int posicionlineaYAbajo = 50;
+    int posicionlineaXDerecha = 50;
     @Override
     public void start(Stage stage) {
         
@@ -77,19 +80,41 @@ public class App extends Application {
         420.0, 584.0 });
         triangulo.setFill(Color.GOLD);
         
+        Line lineaYAbajo = new Line(0,posicionlineaYAbajo,40,posicionlineaYAbajo);
+        lineaYAbajo.setStroke(Color.BLACK);
+        lineaYAbajo.setStrokeWidth(1);
+        
+        Line lineaYArriba = new Line(0,0,50,0);
+        lineaYArriba.setStroke(Color.BLACK);
+        lineaYArriba.setStrokeWidth(1);
+        
+        Line lineaXIzquierda = new Line(0,0,0,50);
+        lineaXIzquierda.setStroke(Color.BLACK);
+        lineaXIzquierda.setStrokeWidth(1);
+        
+        Line lineaXDerecha = new Line(posicionlineaXDerecha,40,posicionlineaXDerecha,0);
+        lineaXDerecha.setStroke(Color.BLACK);
+        lineaXDerecha.setStrokeWidth(1);
+        
         root.getChildren().add(fondoView);
         root.getChildren().add(fondo2View);
+        
         
         root.getChildren().add(triangulo);
         
         root.getChildren().add(plataforma);
         
+        
         Group groupPersonaje = new Group();
+        
         groupPersonaje.getChildren().add(cubo);
         groupPersonaje.getChildren().add(ojoIzquierdo);
         groupPersonaje.getChildren().add(ojoDerecho);
         groupPersonaje.getChildren().add(boca);
-        
+        groupPersonaje.getChildren().add(lineaYAbajo);
+        groupPersonaje.getChildren().add(lineaYArriba);
+        groupPersonaje.getChildren().add(lineaXIzquierda);
+        groupPersonaje.getChildren().add(lineaXDerecha);
         groupPersonaje.setLayoutX(posicionCuboX);
         groupPersonaje.setLayoutY(posicionCuboY);
         
@@ -110,7 +135,7 @@ public class App extends Application {
         }
         
         if (posicionCuboY > 350 && movimientoCuboY == -10){
-            posicionCuboYMovimiento -=2;
+            posicionCuboYMovimiento -=1;
             posicionCuboY += posicionCuboYMovimiento;
             //System.out.println(posicionCuboYMovimiento);
         }
@@ -135,19 +160,24 @@ public class App extends Application {
         //if (fondo2x == -800) {
             //fondo2x = 0;
         //}
-        //System.out.println(movimientoCuboY);
-        //System.out.println(posicionplataformaX);
-        Shape shapeColison = Shape.intersect(plataforma, cubo);
+        System.out.println(posicionplataformaX);
+        //System.out.println(posicionlineaYAbajo);
+        Shape shapeColison = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVacia = shapeColison.getBoundsInLocal().isEmpty();
-            if(colisionVacia == false && posicionCuboY > ((posicionplataformaY/2) * 1.73) && posicionCuboY < ((posicionplataformaY/2) * 1.8)){
+            if(colisionVacia == false && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
                 //posicionCuboYMovimiento = 0;
                 //posicionCuboY = posicionCuboYMovimiento;
                 posicionCuboY = 402;
             }
-            if(colisionVacia == false && posicionCuboX > ((posicionplataformaX/2) * 1.38) && posicionCuboX < (posicionplataformaX/2) * 1.4){
-                
+            
+            Shape shapeColison2 = Shape.intersect(plataforma, lineaXDerecha);
+            boolean colisionVacia2 = shapeColison2.getBoundsInLocal().isEmpty();
+            
+            if(colisionVacia2 == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
                 velocidadCubo = 0;
             }
+            
+            
             
         Shape shapeColisonMuerte = Shape.intersect(triangulo, cubo);
         boolean colisionMuerte = shapeColisonMuerte.getBoundsInLocal().isEmpty();
