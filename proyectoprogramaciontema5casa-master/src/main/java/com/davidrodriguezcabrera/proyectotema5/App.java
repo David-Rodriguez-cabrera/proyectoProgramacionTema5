@@ -29,8 +29,8 @@ public class App extends Application {
     int posicionCuboY = 535;
     int movimientoCuboX = 0;
     int movimientoCuboY = 0;
-    int fondox = 0;
-    int fondo2x = 800;
+    float fondox = 0;
+    float fondo2x = 800;
     int posicionplataformaX= 480;
     int posicionplataformaY= 450;
     int posicionCuboYMovimiento = 0;
@@ -39,13 +39,14 @@ public class App extends Application {
     int posicionlineaXIzquierda = 50;
     int posicionlineaXDerecha = 50;
     int forCubo =0;
-    
+    int ancho_Pantalla= 800;
+    int velocidadFondo = -5;
     @Override
     public void start(Stage stage) {
         
         
         Pane root = new Pane();
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, ancho_Pantalla, 600);
         stage.setTitle("GEOMETRY DASH");
         stage.setScene(scene);
         stage.show();
@@ -131,6 +132,30 @@ public class App extends Application {
         //groupPersonaje.setTranslateY(posicionCuboY);
             posicionCuboX += velocidadCubo;
             //System.out.println(posicionCuboX);
+        
+                fondoView.setLayoutX(fondox);
+                fondox+= velocidadFondo;
+                fondo2View.setLayoutX(fondo2x);
+                fondo2x+= velocidadFondo;
+                
+                if (fondox <= -800) {
+                    fondox = 800;
+                }
+                if (fondo2x <= -800) {
+                    fondo2x = 800;
+                }
+        
+        //fondoView.setLayoutX(fondox);
+                //fondox+= velocidadCubo;
+                //fondo2View.setLayoutX(fondo2x);
+                //fondo2x+= velocidadCubo;
+                //if (fondox >= ancho_Pantalla) {
+                    //fondox = -800;
+                //}
+                //if (fondo2x >= ancho_Pantalla) {
+                    //fondo2x = -800;
+                //}
+                
             
         if (posicionCuboY == 535){
             //groupPersonaje.setTranslateY(posicionCuboY);
