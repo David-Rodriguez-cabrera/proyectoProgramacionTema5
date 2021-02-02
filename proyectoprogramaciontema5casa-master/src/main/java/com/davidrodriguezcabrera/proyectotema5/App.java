@@ -35,7 +35,11 @@ public class App extends Application {
     int posicionplataformaY= 450;
     int posicionCuboYMovimiento = 0;
     int posicionlineaYAbajo = 50;
+    int posicionlineaYArriba = 50;
+    int posicionlineaXIzquierda = 50;
     int posicionlineaXDerecha = 50;
+    int forCubo =0;
+    
     @Override
     public void start(Stage stage) {
         
@@ -80,19 +84,19 @@ public class App extends Application {
         420.0, 584.0 });
         triangulo.setFill(Color.GOLD);
         
-        Line lineaYAbajo = new Line(0,posicionlineaYAbajo,40,posicionlineaYAbajo);
+        Line lineaYAbajo = new Line(10,posicionlineaYAbajo,45,posicionlineaYAbajo);
         lineaYAbajo.setStroke(Color.BLACK);
         lineaYAbajo.setStrokeWidth(1);
         
-        Line lineaYArriba = new Line(0,0,50,0);
+        Line lineaYArriba = new Line(10,0,45,0);
         lineaYArriba.setStroke(Color.BLACK);
         lineaYArriba.setStrokeWidth(1);
         
-        Line lineaXIzquierda = new Line(0,0,0,50);
+        Line lineaXIzquierda = new Line(0,10,0,45);
         lineaXIzquierda.setStroke(Color.BLACK);
         lineaXIzquierda.setStrokeWidth(1);
         
-        Line lineaXDerecha = new Line(posicionlineaXDerecha,40,posicionlineaXDerecha,0);
+        Line lineaXDerecha = new Line(posicionlineaXDerecha,45,posicionlineaXDerecha,10);
         lineaXDerecha.setStroke(Color.BLACK);
         lineaXDerecha.setStrokeWidth(1);
         
@@ -146,21 +150,16 @@ public class App extends Application {
             
         }
         if (posicionCuboY >= 535){
-            //groupPersonaje.setTranslateY(posicionCuboY);
             posicionCuboY = 535;
-            //posicionCuboYMovimiento = 2;
-            //posicionCuboY += posicionCuboYMovimiento;
-            //posicionCuboY += 2;
-            
         }
-        //if (posicionCuboX > 100){
-            //fondo2x -=10;
-            //System.out.println(fondo2x);
+        //if (posicionCuboX > 150){
+            //fondox +=10;
+            //System.out.println(fondox);
             //}
-        //if (fondo2x == -800) {
-            //fondo2x = 0;
+        //if (fondox >= 800) {
+            //fondo2x -= 10;
         //}
-        System.out.println(posicionplataformaX);
+        //System.out.println(posicionplataformaX);
         //System.out.println(posicionlineaYAbajo);
         Shape shapeColison = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVacia = shapeColison.getBoundsInLocal().isEmpty();
@@ -174,7 +173,9 @@ public class App extends Application {
             boolean colisionVacia2 = shapeColison2.getBoundsInLocal().isEmpty();
             
             if(colisionVacia2 == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
-                velocidadCubo = 0;
+                posicionCuboX = 100;
+                posicionCuboY = 535;
+                velocidadCubo = 3;
             }
             
             
