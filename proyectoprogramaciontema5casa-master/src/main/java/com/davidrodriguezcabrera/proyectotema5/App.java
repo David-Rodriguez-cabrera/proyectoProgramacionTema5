@@ -24,7 +24,7 @@ import javafx.util.Duration;
  * JavaFX App
  */
 public class App extends Application {
-    int velocidadCubo = 3;
+    int velocidadCubo = 2;
     int posicionCuboX = 100;
     int posicionCuboY = 535;
     int movimientoCuboX = 0;
@@ -40,7 +40,7 @@ public class App extends Application {
     int posicionlineaXDerecha = 50;
     int forCubo =0;
     int ancho_Pantalla= 800;
-    int velocidadFondo = -5;
+    int velocidadFondo = -2;
     @Override
     public void start(Stage stage) {
         
@@ -130,9 +130,10 @@ public class App extends Application {
         groupPersonaje.setTranslateX(posicionCuboX);
         groupPersonaje.setLayoutY(posicionCuboY);
         //groupPersonaje.setTranslateY(posicionCuboY);
-            posicionCuboX += velocidadCubo;
+            //posicionCuboX += velocidadCubo;
             //System.out.println(posicionCuboX);
-        
+            plataforma.setTranslateX(posicionplataformaX);
+            posicionplataformaX -= velocidadCubo;
                 fondoView.setLayoutX(fondox);
                 fondox+= velocidadFondo;
                 fondo2View.setLayoutX(fondo2x);
@@ -144,7 +145,7 @@ public class App extends Application {
                 if (fondo2x <= -800) {
                     fondo2x = 800;
                 }
-        
+            
         //fondoView.setLayoutX(fondox);
                 //fondox+= velocidadCubo;
                 //fondo2View.setLayoutX(fondo2x);
@@ -184,8 +185,8 @@ public class App extends Application {
         //if (fondox >= 800) {
             //fondo2x -= 10;
         //}
-        //System.out.println(posicionplataformaX);
-        //System.out.println(posicionlineaYAbajo);
+        System.out.println(posicionplataformaX);
+        
         Shape shapeColison = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVacia = shapeColison.getBoundsInLocal().isEmpty();
             if(colisionVacia == false && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
@@ -200,7 +201,9 @@ public class App extends Application {
             if(colisionVacia2 == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
                 posicionCuboX = 100;
                 posicionCuboY = 535;
-                velocidadCubo = 3;
+                velocidadCubo = 2;
+                fondox = 0;
+                fondo2x = 800;
             }
             
             
@@ -210,7 +213,9 @@ public class App extends Application {
         if(colisionMuerte == false){
                 posicionCuboX = 100;
                 posicionCuboY = 535;
-                velocidadCubo = 3;
+                velocidadCubo = 2;
+                fondox = 0;
+                fondo2x = 800;
             }
             
         })
