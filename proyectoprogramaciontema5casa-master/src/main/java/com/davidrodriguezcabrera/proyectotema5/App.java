@@ -31,16 +31,19 @@ public class App extends Application {
     int movimientoCuboY = 0;
     float fondox = 0;
     float fondo2x = 800;
-    int posicionplataformaX= 480;
+    int posicionplataformaX= 450;
     int posicionplataformaY= 450;
     int posicionCuboYMovimiento = 0;
     int posicionlineaYAbajo = 50;
     int posicionlineaYArriba = 50;
     int posicionlineaXIzquierda = 50;
     int posicionlineaXDerecha = 50;
-    int forCubo =0;
     int ancho_Pantalla= 800;
     int velocidadFondo = -2;
+    double trianguloArriba = 450.0;
+    double trianguloDerecha = 480.0;
+    double trianguloIzquierda = 420.0;
+    
     @Override
     public void start(Stage stage) {
         
@@ -80,9 +83,9 @@ public class App extends Application {
         
         Polygon triangulo = new Polygon();
         triangulo.getPoints().addAll(new Double[]{
-        450.0, 510.0,
-        480.0, 584.0,
-        420.0, 584.0 });
+        trianguloArriba, 510.0,
+        trianguloDerecha, 584.0,
+        trianguloIzquierda, 584.0 });
         triangulo.setFill(Color.GOLD);
         
         Line lineaYAbajo = new Line(10,posicionlineaYAbajo,45,posicionlineaYAbajo);
@@ -133,7 +136,15 @@ public class App extends Application {
             //posicionCuboX += velocidadCubo;
             //System.out.println(posicionCuboX);
             plataforma.setTranslateX(posicionplataformaX);
+            
             posicionplataformaX -= velocidadCubo;
+            trianguloArriba -= velocidadCubo;
+            trianguloDerecha -= velocidadCubo;
+            trianguloIzquierda -= velocidadCubo;
+            triangulo.setLayoutX(trianguloArriba);
+            triangulo.setLayoutX(trianguloDerecha);
+            triangulo.setLayoutX(trianguloIzquierda);
+            
                 fondoView.setLayoutX(fondox);
                 fondox+= velocidadFondo;
                 fondo2View.setLayoutX(fondo2x);
@@ -146,28 +157,12 @@ public class App extends Application {
                     fondo2x = 800;
                 }
             
-        //fondoView.setLayoutX(fondox);
-                //fondox+= velocidadCubo;
-                //fondo2View.setLayoutX(fondo2x);
-                //fondo2x+= velocidadCubo;
-                //if (fondox >= ancho_Pantalla) {
-                    //fondox = -800;
-                //}
-                //if (fondo2x >= ancho_Pantalla) {
-                    //fondo2x = -800;
-                //}
                 
             
-        if (posicionCuboY == 535){
-            //groupPersonaje.setTranslateY(posicionCuboY);
-            posicionCuboY += posicionCuboYMovimiento;
-            //System.out.println(posicionCuboY);
-        }
         
         if (posicionCuboY > 350 && movimientoCuboY == -10){
             posicionCuboYMovimiento -=1;
             posicionCuboY += posicionCuboYMovimiento;
-            //System.out.println(posicionCuboYMovimiento);
         }
         else{
             movimientoCuboY = 0;
@@ -185,7 +180,7 @@ public class App extends Application {
         //if (fondox >= 800) {
             //fondo2x -= 10;
         //}
-        System.out.println(posicionplataformaX);
+        //System.out.println(posicionplataformaX);
         
         Shape shapeColison = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVacia = shapeColison.getBoundsInLocal().isEmpty();
@@ -199,11 +194,25 @@ public class App extends Application {
             boolean colisionVacia2 = shapeColison2.getBoundsInLocal().isEmpty();
             
             if(colisionVacia2 == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
-                posicionCuboX = 100;
-                posicionCuboY = 535;
                 velocidadCubo = 2;
-                fondox = 0;
-                fondo2x = 800;
+    posicionCuboX = 100;
+    posicionCuboY = 535;
+    movimientoCuboX = 0;
+    movimientoCuboY = 0;
+    fondox = 0;
+    fondo2x = 800;
+    posicionplataformaX= 450;
+    posicionplataformaY= 450;
+    posicionCuboYMovimiento = 0;
+    posicionlineaYAbajo = 50;
+    posicionlineaYArriba = 50;
+    posicionlineaXIzquierda = 50;
+    posicionlineaXDerecha = 50;
+    ancho_Pantalla= 800;
+    velocidadFondo = -2;
+    trianguloArriba = 450.0;
+    trianguloDerecha = 480.0;
+    trianguloIzquierda = 420.0;
             }
             
             
@@ -211,11 +220,25 @@ public class App extends Application {
         Shape shapeColisonMuerte = Shape.intersect(triangulo, cubo);
         boolean colisionMuerte = shapeColisonMuerte.getBoundsInLocal().isEmpty();
         if(colisionMuerte == false){
-                posicionCuboX = 100;
-                posicionCuboY = 535;
-                velocidadCubo = 2;
-                fondox = 0;
-                fondo2x = 800;
+    velocidadCubo = 2;
+    posicionCuboX = 100;
+    posicionCuboY = 535;
+    movimientoCuboX = 0;
+    movimientoCuboY = 0;
+    fondox = 0;
+    fondo2x = 800;
+    posicionplataformaX= 450;
+    posicionplataformaY= 450;
+    posicionCuboYMovimiento = 0;
+    posicionlineaYAbajo = 50;
+    posicionlineaYArriba = 50;
+    posicionlineaXIzquierda = 50;
+    posicionlineaXDerecha = 50;
+    ancho_Pantalla= 800;
+    velocidadFondo = -2;
+    trianguloArriba = 450.0;
+    trianguloDerecha = 480.0;
+    trianguloIzquierda = 420.0;
             }
             
         })
@@ -231,11 +254,6 @@ public class App extends Application {
                     if (posicionCuboY == 535){
                     movimientoCuboY -=10;
                     }
-                    //if (posicionCuboY == 445){
-                        
-                    //}
-                    //posicionCuboY += movimientoCuboY;
-                    //System.out.println(posicionCuboY);
                     break;
                 
             }
