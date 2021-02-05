@@ -57,50 +57,54 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         
-        
+        //PANEL ROOT
         Pane root = new Pane();
         Scene scene = new Scene(root, ancho_Pantalla, 600);
         stage.setTitle("GEOMETRY DASH");
         stage.setScene(scene);
         stage.show();
         
+        //CUBO PERSONAJE
         Rectangle cubo = new Rectangle(50,50);
         cubo.setFill(Color.YELLOW);
         
-        
+        //OJO IZQUIERDO
         Rectangle ojoIzquierdo = new Rectangle(10,10,10,10);
         ojoIzquierdo.setFill(Color.BLUE);
         
-        
+        //OJODERECHO
         Rectangle ojoDerecho = new Rectangle(30,10,10,10);
         ojoDerecho.setFill(Color.BLUE);
         
-        
+        //BOCA
         Rectangle boca = new Rectangle(10,30,30,10);
         boca.setFill(Color.BLUE);
         
-        
+        //PRIMERA IMAGEN FONDO
         Image fondo = new Image(getClass().getResourceAsStream("/images/grid_bg.png"));
         ImageView fondoView = new ImageView(fondo);
         fondoView.setLayoutX(fondox);
         
+        //SEGUNDA IMAGEN FONDO
         Image fondo2 = new Image(getClass().getResourceAsStream("/images/grid_bg.png"));
         ImageView fondo2View = new ImageView(fondo2);
         fondo2View.setLayoutX(fondo2x);
         
+        //PRIMERA PLATAFORMA
         Rectangle plataforma = new Rectangle(posicionplataformaX,posicionplataformaY,60,60);
         plataforma.setFill(Color.BLACK);
-        
+        //SEGUNDA PLATAFORMA
         Rectangle plataforma2 = new Rectangle(posicionplataformaX2,posicionplataformaY2,60,60);
         plataforma2.setFill(Color.BLACK);
         
+        //PRIMER TRIANGULO
         Polygon triangulo = new Polygon();
         triangulo.getPoints().addAll(new Double[]{
         trianguloArriba, 510.0,
         trianguloDerecha, 584.0,
         trianguloIzquierda, 584.0 });
         triangulo.setFill(Color.GOLD);
-        
+        //SEGUNDO TRIANGULO
         Polygon triangulo2 = new Polygon();
         triangulo2.getPoints().addAll(new Double[]{
         trianguloArriba2, 510.0,
@@ -108,58 +112,60 @@ public class App extends Application {
         trianguloIzquierda2, 584.0 });
         triangulo2.setFill(Color.GOLD);
         
+        //LINEA ABAJO PERSONAJE
         Line lineaYAbajo = new Line(10,posicionlineaYAbajo,45,posicionlineaYAbajo);
         lineaYAbajo.setStroke(Color.BLACK);
         lineaYAbajo.setStrokeWidth(1);
-        
+        //LINEA ARRIBA PERSONAJE
         Line lineaYArriba = new Line(10,0,45,0);
         lineaYArriba.setStroke(Color.BLACK);
         lineaYArriba.setStrokeWidth(1);
-        
+        //LINEA IZQUIERDA PERSONAJE
         Line lineaXIzquierda = new Line(0,10,0,45);
         lineaXIzquierda.setStroke(Color.BLACK);
         lineaXIzquierda.setStrokeWidth(1);
-        
+        //LINEA DERECHA PERSONAJE
         Line lineaXDerecha = new Line(posicionlineaXDerecha,45,posicionlineaXDerecha,10);
         lineaXDerecha.setStroke(Color.BLACK);
         lineaXDerecha.setStrokeWidth(1);
         
+        //TEXTOS DISTANCIA Y DISTANCIA MAXIMA
         HBox paneScores = new HBox();
         paneScores.setTranslateY(20);
         paneScores.setMinWidth(ancho_Pantalla);
         paneScores.setAlignment(Pos.CENTER);
         paneScores.setSpacing(100);
-        // LAYOUT PARA PUNTUACION ACTUAL
+        // LAYOUT PARA DISTANCIA ACTUAL
         HBox paneCurrentScore = new HBox();
         paneCurrentScore.setSpacing(10);
         
-        // LAYOUT PARA PUNTUACION MAXIMA
+        // LAYOUT PARA DISTANCIA MAXIMA
         HBox paneHighScore = new HBox();
         paneHighScore.setSpacing(10);
         
-        // TEXTO DE ETIQUETA PARA PUNTUACION
+        // TEXTO DE ETIQUETA PARA DISTANCIA
         Text textTitleScore = new Text("Distancia");
         textTitleScore.setFont(Font.font(TEXT_SIZE));
         textTitleScore.setFill(Color.WHITE);
-        // TEXTO PARA LA PUNTUACION
+        // TEXTO PARA LA DISTANCIA
         Text textScore = new Text("0");
         textScore.setFont(Font.font(TEXT_SIZE));
         textScore.setFill(Color.WHITE);
-        // TEXTO DE ETIQUETA PARA LA PUNTUACION MAXIMA
+        // TEXTO DE ETIQUETA PARA LA DISTANCIA MAXIMA
         Text textTitleHighScore = new Text("Distancia.Maxima");
         textTitleHighScore.setFont(Font.font(TEXT_SIZE));
         textTitleHighScore.setFill(Color.WHITE);
-        //TEXTO PARA LA PUNTUACION MAXIMA
+        //TEXTO PARA LA DISTANCIA MAXIMA
         Text textHighScore = new Text("0");
         textHighScore.setFont(Font.font(TEXT_SIZE));
         textHighScore.setFill(Color.WHITE);
-        // AÑADIR LOS TEXTOS A LOS LAYOUTS RESERVADOS PARA ELLOS
         
         
-        
+        //FONDO
         root.getChildren().add(fondoView);
         root.getChildren().add(fondo2View);
         
+        // AÑADIR LOS TEXTOS A LOS LAYOUTS RESERVADOS PARA ELLOS
         root.getChildren().add(paneScores);
         paneScores.getChildren().add(paneCurrentScore);
         paneScores.getChildren().add(paneHighScore);
@@ -168,13 +174,14 @@ public class App extends Application {
         paneHighScore.getChildren().add(textTitleHighScore);
         paneHighScore.getChildren().add(textHighScore);
         
+        //AÑADIR PLATAFORMAS Y TRIANGULOS
         root.getChildren().add(plataforma);
         //root.getChildren().add(plataforma2);
         root.getChildren().add(triangulo);
         //root.getChildren().add(triangulo2);
         
+        //AÑADIR GRUPO PERSONAJE
         Group groupPersonaje = new Group();
-        
         groupPersonaje.getChildren().add(cubo);
         groupPersonaje.getChildren().add(ojoIzquierdo);
         groupPersonaje.getChildren().add(ojoDerecho);
@@ -188,19 +195,23 @@ public class App extends Application {
         
         root.getChildren().add(groupPersonaje);
         
+        //TIMELINE
         Timeline animationCubo = new Timeline(
         new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) ->{
+            //TRANSLATE PERSONAJE
         groupPersonaje.setTranslateX(posicionCuboX);
         groupPersonaje.setLayoutY(posicionCuboY);
         //groupPersonaje.setTranslateY(posicionCuboY);
             //posicionCuboX += velocidadCubo;
             //System.out.println(posicionCuboX);
+            //TRANSLATE Y VELOCIDAD PLATAFORMAS
             plataforma.setTranslateX(posicionplataformaX);
             posicionplataformaX -= velocidadCubo;
             
             //plataforma2.setTranslateX(posicionplataformaX2);
             //posicionplataformaX2 -= velocidadCubo;
             
+            //LAYOUTS Y VELOCIDAD PLATAFORMAS
             trianguloArriba -= velocidadCubo;
             trianguloDerecha -= velocidadCubo;
             trianguloIzquierda -= velocidadCubo;
@@ -215,6 +226,7 @@ public class App extends Application {
             //triangulo.setLayoutX(trianguloDerecha2);
             //triangulo.setLayoutX(trianguloIzquierda2);
             
+            //MOVIMIENTO INFINITO PANTALLA
                 fondoView.setLayoutX(fondox);
                 fondox+= velocidadFondo;
                 fondo2View.setLayoutX(fondo2x);
@@ -226,11 +238,12 @@ public class App extends Application {
                 if (fondo2x <= -800) {
                     fondo2x = 800;
                 }
-         
+         //DISTANCIA MAXIMA
         if (Distancia > DistanciaMaxima){
                     DistanciaMaxima = Distancia;
                     textHighScore.setText(String.valueOf(DistanciaMaxima));
-                }        
+                }
+        //DISTANCIA
         if (fondox> -900){
             Distancia += 1;
             textScore.setText(String.valueOf(Distancia));
@@ -238,22 +251,25 @@ public class App extends Application {
         //System.out.println(Distancia);
         //System.out.println(posicionCuboX);
         
+        // SALTO
         if (posicionCuboY > 360 && movimientoCuboY == -10){
             posicionCuboYMovimiento =-4;
             posicionCuboY += posicionCuboYMovimiento;
         }
+        //CAIDA
         else{
             movimientoCuboY = 0;
             posicionCuboYMovimiento = 4;
             posicionCuboY += posicionCuboYMovimiento;
             
         }
-        
+        //SUELO
         if (posicionCuboY >= 535){
             posicionCuboY = 535;
             posicionCuboYMovimiento= 0;
         }
         
+        //MUSICA
         //URL urlAudio = getClass().getResource("/audio/GEOMETRY-DASH.m4a");
 //if(urlAudio != null) {
     //try {
@@ -266,7 +282,7 @@ public class App extends Application {
     //System.out.println("No se ha encontrado el archivo de audio");
 //}
         
-        
+        //COLISON PLATAFORMA ARRIBA
         Shape shapeColisonPlataformaY = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVaciaPlataformaY = shapeColisonPlataformaY.getBoundsInLocal().isEmpty();
             if(colisionVaciaPlataformaY == false && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
@@ -277,13 +293,15 @@ public class App extends Application {
                 movimientoCuboY = 0;
             }
             
+            
+            //COLISON PLATAFORMA LADOS
             Shape shapeColisonPlataformaX = Shape.intersect(plataforma, lineaXDerecha);
             boolean colisionVaciaPlataformaX = shapeColisonPlataformaX.getBoundsInLocal().isEmpty();
             if(colisionVaciaPlataformaX == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
                 Reinicio();
             }
             
-            
+        //COLISION TRIANGULO MUERTE
         Shape shapeColisonMuerte = Shape.intersect(triangulo, cubo);
         boolean colisionMuerte = shapeColisonMuerte.getBoundsInLocal().isEmpty();
         if(colisionMuerte == false){
@@ -296,7 +314,7 @@ public class App extends Application {
         animationCubo.play();
                 
         
-            
+            //DEFINIR CONTROLES
         scene.setOnKeyPressed((KeyEvent event) -> {
             switch(event.getCode()){
                 case SPACE:
@@ -314,7 +332,7 @@ public class App extends Application {
         });
         
     }
-
+// VOID DE REINICIO
     private void Reinicio() {
     velocidadCubo = 3;
     posicionCuboX = 100;
