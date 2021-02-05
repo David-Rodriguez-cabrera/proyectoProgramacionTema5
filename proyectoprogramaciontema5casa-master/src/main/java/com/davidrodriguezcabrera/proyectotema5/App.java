@@ -239,12 +239,12 @@ public class App extends Application {
         //System.out.println(posicionCuboX);
         
         if (posicionCuboY > 360 && movimientoCuboY == -10){
-            posicionCuboYMovimiento =-3;
+            posicionCuboYMovimiento =-4;
             posicionCuboY += posicionCuboYMovimiento;
         }
         else{
             movimientoCuboY = 0;
-            posicionCuboYMovimiento = 3;
+            posicionCuboYMovimiento = 4;
             posicionCuboY += posicionCuboYMovimiento;
             
         }
@@ -254,13 +254,25 @@ public class App extends Application {
             posicionCuboYMovimiento= 0;
         }
         
+        //URL urlAudio = getClass().getResource("/audio/GEOMETRY-DASH.m4a");
+//if(urlAudio != null) {
+    //try {
+        //AudioClip audioClip1 = new AudioClip(urlAudio.toURI().toString());
+        //audioClip1.play();
+    //} catch (URISyntaxException ex) {
+        //System.out.println("Error en el formato de ruta de archivo de audio");
+    //}            
+//} else {
+    //System.out.println("No se ha encontrado el archivo de audio");
+//}
+        
         
         Shape shapeColisonPlataformaY = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVaciaPlataformaY = shapeColisonPlataformaY.getBoundsInLocal().isEmpty();
             if(colisionVaciaPlataformaY == false && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
                 //posicionCuboYMovimiento = 0;
                 //posicionCuboY = posicionCuboYMovimiento;
-                posicionCuboY = 402;
+                posicionCuboY = posicionplataformaY-50;
                 posicionCuboYMovimiento= 0;
                 movimientoCuboY = 0;
             }
@@ -268,62 +280,14 @@ public class App extends Application {
             Shape shapeColisonPlataformaX = Shape.intersect(plataforma, lineaXDerecha);
             boolean colisionVaciaPlataformaX = shapeColisonPlataformaX.getBoundsInLocal().isEmpty();
             if(colisionVaciaPlataformaX == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
-                velocidadCubo = 3;
-    posicionCuboX = 100;
-    posicionCuboY = 535;
-    movimientoCuboX = 0;
-    movimientoCuboY = 0;
-    fondox = 0;
-    fondo2x = 800;
-    posicionCuboYMovimiento = 0;
-    posicionlineaYAbajo = 50;
-    posicionlineaYArriba = 50;
-    posicionlineaXIzquierda = 50;
-    posicionlineaXDerecha = 50;
-    ancho_Pantalla= 800;
-    velocidadFondo = -2;
-    posicionplataformaX= 450;
-    posicionplataformaY= 450;
-    posicionplataformaX2= 550;
-    posicionplataformaY2= 550;
-    trianguloArriba = 450.0;
-    trianguloDerecha = 480.0;
-    trianguloIzquierda = 420.0;
-    trianguloArriba2 = 550.0;
-    trianguloDerecha2 = 580.0;
-    trianguloIzquierda2 = 520.0;
-    Distancia = 0;
+                Reinicio();
             }
             
             
         Shape shapeColisonMuerte = Shape.intersect(triangulo, cubo);
         boolean colisionMuerte = shapeColisonMuerte.getBoundsInLocal().isEmpty();
         if(colisionMuerte == false){
-    velocidadCubo = 3;
-    posicionCuboX = 100;
-    posicionCuboY = 535;
-    movimientoCuboX = 0;
-    movimientoCuboY = 0;
-    fondox = 0;
-    fondo2x = 800;
-    posicionCuboYMovimiento = 0;
-    posicionlineaYAbajo = 50;
-    posicionlineaYArriba = 50;
-    posicionlineaXIzquierda = 50;
-    posicionlineaXDerecha = 50;
-    ancho_Pantalla= 800;
-    velocidadFondo = -2;
-    posicionplataformaX= 450;
-    posicionplataformaY= 450;
-    posicionplataformaX2= 550;
-    posicionplataformaY2= 550;
-    trianguloArriba = 450.0;
-    trianguloDerecha = 480.0;
-    trianguloIzquierda = 420.0;
-    trianguloArriba2 = 550.0;
-    trianguloDerecha2 = 580.0;
-    trianguloIzquierda2 = 520.0;
-    Distancia = 0;
+        Reinicio();
             }
             
         })
@@ -351,6 +315,36 @@ public class App extends Application {
         
     }
 
+    private void Reinicio() {
+    velocidadCubo = 3;
+    posicionCuboX = 100;
+    posicionCuboY = 535;
+    movimientoCuboX = 0;
+    movimientoCuboY = 0;
+    fondox = 0;
+    fondo2x = 800;
+    posicionCuboYMovimiento = 0;
+    posicionlineaYAbajo = 50;
+    posicionlineaYArriba = 50;
+    posicionlineaXIzquierda = 50;
+    posicionlineaXDerecha = 50;
+    ancho_Pantalla= 800;
+    velocidadFondo = -2;
+    posicionplataformaX= 450;
+    posicionplataformaY= 450;
+    posicionplataformaX2= 550;
+    posicionplataformaY2= 550;
+    trianguloArriba = 450.0;
+    trianguloDerecha = 480.0;
+    trianguloIzquierda = 420.0;
+    trianguloArriba2 = 550.0;
+    trianguloDerecha2 = 580.0;
+    trianguloIzquierda2 = 520.0;
+    Distancia = 0;   
+               
+    }
+    
+    
     public static void main(String[] args) {
         launch();
     }
