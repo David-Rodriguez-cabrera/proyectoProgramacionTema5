@@ -44,16 +44,19 @@ public class App extends Application {
     int posicionplataformaX= 450;
     int posicionplataformaY= 450;
     int posicionplataformaX2= 550;
-    int posicionplataformaY2= 550;
+    int posicionplataformaY2= 525;
     double trianguloArriba = 450.0;
     double trianguloDerecha = 480.0;
     double trianguloIzquierda = 420.0;
-    double trianguloArriba2 = 550.0;
-    double trianguloDerecha2 = 580.0;
-    double trianguloIzquierda2 = 520.0;
+    double trianguloArriba2 = 650.0;
+    double trianguloDerecha2 = 680.0;
+    double trianguloIzquierda2 = 620.0;
     final int TEXT_SIZE = 24;
     int Distancia = 0;
     int DistanciaMaxima = 0;
+    boolean encimaDEPlataforma;
+    int SueloY= 585;
+    boolean Sueloboolean = true;
     @Override
     public void start(Stage stage) {
         
@@ -129,6 +132,10 @@ public class App extends Application {
         lineaXDerecha.setStroke(Color.BLACK);
         lineaXDerecha.setStrokeWidth(1);
         
+        Line Suelo = new Line(ancho_Pantalla,SueloY,0,SueloY);
+        Suelo.setStroke(Color.LAWNGREEN);
+        Suelo.setStrokeWidth(5);
+        
         //TEXTOS DISTANCIA Y DISTANCIA MAXIMA
         HBox paneScores = new HBox();
         paneScores.setTranslateY(20);
@@ -176,9 +183,9 @@ public class App extends Application {
         
         //AÑADIR PLATAFORMAS Y TRIANGULOS
         root.getChildren().add(plataforma);
-        //root.getChildren().add(plataforma2);
+        root.getChildren().add(plataforma2);
         root.getChildren().add(triangulo);
-        //root.getChildren().add(triangulo2);
+        root.getChildren().add(triangulo2);
         
         //AÑADIR GRUPO PERSONAJE
         Group groupPersonaje = new Group();
@@ -195,6 +202,7 @@ public class App extends Application {
         
         root.getChildren().add(groupPersonaje);
         
+        root.getChildren().add(Suelo);
         //TIMELINE
         Timeline animationCubo = new Timeline(
         new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) ->{
@@ -208,8 +216,8 @@ public class App extends Application {
             plataforma.setTranslateX(posicionplataformaX);
             posicionplataformaX -= velocidadCubo;
             
-            //plataforma2.setTranslateX(posicionplataformaX2);
-            //posicionplataformaX2 -= velocidadCubo;
+            plataforma2.setTranslateX(posicionplataformaX2);
+            posicionplataformaX2 -= velocidadCubo;
             
             //LAYOUTS Y VELOCIDAD PLATAFORMAS
             trianguloArriba -= velocidadCubo;
@@ -219,12 +227,12 @@ public class App extends Application {
             triangulo.setLayoutX(trianguloDerecha);
             triangulo.setLayoutX(trianguloIzquierda);
             
-            //trianguloArriba2 -= velocidadCubo;
-            //trianguloDerecha2 -= velocidadCubo;
-            //trianguloIzquierda2 -= velocidadCubo;
-            //triangulo.setLayoutX(trianguloArriba2);
-            //triangulo.setLayoutX(trianguloDerecha2);
-            //triangulo.setLayoutX(trianguloIzquierda2);
+            trianguloArriba2 -= velocidadCubo;
+            trianguloDerecha2 -= velocidadCubo;
+            trianguloIzquierda2 -= velocidadCubo;
+            triangulo2.setLayoutX(trianguloArriba2);
+            triangulo2.setLayoutX(trianguloDerecha2);
+            triangulo2.setLayoutX(trianguloIzquierda2);
             
             //MOVIMIENTO INFINITO PANTALLA
                 fondoView.setLayoutX(fondox);
@@ -249,7 +257,7 @@ public class App extends Application {
             textScore.setText(String.valueOf(Distancia));
         }
         //System.out.println(Distancia);
-        //System.out.println(posicionCuboX);
+       
         
         // SALTO
         if (posicionCuboY > 360 && movimientoCuboY == -10){
@@ -261,13 +269,15 @@ public class App extends Application {
             movimientoCuboY = 0;
             posicionCuboYMovimiento = 4;
             posicionCuboY += posicionCuboYMovimiento;
-            
+            Sueloboolean = true;
         }
         //SUELO
-        if (posicionCuboY >= 535){
-            posicionCuboY = 535;
-            posicionCuboYMovimiento= 0;
-        }
+        //if (posicionCuboY >= 535){
+            //posicionCuboY = 535;
+            //posicionCuboYMovimiento= 0;
+        //}
+        
+        
         
         //MUSICA
         //URL urlAudio = getClass().getResource("/audio/GEOMETRY-DASH.m4a");
@@ -282,6 +292,14 @@ public class App extends Application {
     //System.out.println("No se ha encontrado el archivo de audio");
 //}
         
+        //Colison SUELO
+        Shape shapeSuelo = Shape.intersect(Suelo, cubo);
+        boolean colisionSuelo = shapeSuelo.getBoundsInLocal().isEmpty();
+        if (colisionSuelo == false && (Sueloboolean == true)){
+            posicionCuboY = SueloY-50;
+            posicionCuboYMovimiento= 0;
+        }
+
         //COLISON PLATAFORMA ARRIBA
         Shape shapeColisonPlataformaY = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVaciaPlataformaY = shapeColisonPlataformaY.getBoundsInLocal().isEmpty();
@@ -291,6 +309,9 @@ public class App extends Application {
                 posicionCuboY = posicionplataformaY-50;
                 posicionCuboYMovimiento= 0;
                 movimientoCuboY = 0;
+                encimaDEPlataforma = false;
+                 System.out.println(movimientoCuboY);
+                
             }
             
             
@@ -307,7 +328,8 @@ public class App extends Application {
         if(colisionMuerte == false){
         Reinicio();
             }
-            
+        
+        
         })
         );
         animationCubo.setCycleCount(Timeline.INDEFINITE);
@@ -321,6 +343,7 @@ public class App extends Application {
                     //System.out.println(posicionCuboYMovimiento);
                     if (posicionCuboYMovimiento== 0){
                     movimientoCuboY -=10;
+                    Sueloboolean = false;
                     }
                     break;
                 
