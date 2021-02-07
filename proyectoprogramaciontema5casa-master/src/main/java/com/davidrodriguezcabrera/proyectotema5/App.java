@@ -28,7 +28,7 @@ import javafx.scene.media.AudioClip;
  * JavaFX App
  */
 public class App extends Application {
-    int velocidadCubo = 3;
+    int velocidad = 3;
     int posicionCuboX = 100;
     int posicionCuboY = 535;
     int movimientoCuboX = 0;
@@ -59,9 +59,11 @@ public class App extends Application {
     int SueloY= 585;
     boolean Sueloboolean = true;
     AudioClip musicaFondo;
+    AudioClip Muerte;
+    AudioClip Victoria;
+    int BanderaX = 1300;
     @Override
     public void start(Stage stage) {
-        
         //PANEL ROOT
         Pane root = new Pane();
         Scene scene = new Scene(root, ancho_Pantalla, 600);
@@ -94,6 +96,11 @@ public class App extends Application {
         Image fondo2 = new Image(getClass().getResourceAsStream("/images/grid_bg.png"));
         ImageView fondo2View = new ImageView(fondo2);
         fondo2View.setLayoutX(fondo2x);
+        
+        //Bandera España
+        Image Bandera = new Image(getClass().getResourceAsStream("/images/Bandera.png"));
+        ImageView BanderaView = new ImageView(Bandera);
+        BanderaView.setLayoutX(BanderaX);
         
         //PRIMERA PLATAFORMA
         Rectangle plataforma = new Rectangle(posicionplataformaX,posicionplataformaY,60,60);
@@ -181,9 +188,34 @@ public class App extends Application {
         System.out.println("No se ha encontrado el archivo de audio");
         }
         
+        //SONIDO MUERTE
+        URL urlMuerte = getClass().getResource("/audio/Muerte.mp3");
+        if(urlMuerte != null) {
+            try {
+                Muerte = new AudioClip(urlMuerte.toURI().toString());
+                
+            } catch (URISyntaxException ex) {
+            }            
+        } else {
+        System.out.println("No se ha encontrado el archivo de audio");
+        }
+        
+        //SONIDO Victoria
+        URL urlVictoria = getClass().getResource("/audio/Victoria.mp3");
+        if(urlVictoria != null) {
+            try {
+                Victoria = new AudioClip(urlVictoria.toURI().toString());
+                
+            } catch (URISyntaxException ex) {
+            }            
+        } else {
+        System.out.println("No se ha encontrado el archivo de audio");
+        }
+        
         //FONDO
         root.getChildren().add(fondoView);
         root.getChildren().add(fondo2View);
+        root.getChildren().add(BanderaView);
         
         // AÑADIR LOS TEXTOS A LOS LAYOUTS RESERVADOS PARA ELLOS
         root.getChildren().add(paneScores);
@@ -217,35 +249,52 @@ public class App extends Application {
         
         root.getChildren().add(Suelo);
         //TIMELINE
+        
         Timeline animationCubo = new Timeline(
         new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) ->{
             //TRANSLATE PERSONAJE
         groupPersonaje.setTranslateX(posicionCuboX);
         groupPersonaje.setLayoutY(posicionCuboY);
         //groupPersonaje.setTranslateY(posicionCuboY);
-            //posicionCuboX += velocidadCubo;
+            //posicionCuboX += velocidad;
             //System.out.println(posicionCuboX);
+            
             //TRANSLATE Y VELOCIDAD PLATAFORMAS
             plataforma.setTranslateX(posicionplataformaX);
-            posicionplataformaX -= velocidadCubo;
-            
+            posicionplataformaX -= velocidad;
             plataforma2.setTranslateX(posicionplataformaX2);
-            posicionplataformaX2 -= velocidadCubo;
+            posicionplataformaX2 -= velocidad;
+            
+            //for(int i=0; i<300; i+=67){
+                //System.out.println(i);
+                //Rectangle plataforma2 = new Rectangle(posicionplataformaX2+i,posicionplataformaY2,60,60);
+        //plataforma2.setFill(Color.BLACK);
+        //root.getChildren().add(plataforma2);
+        //plataforma2.setTranslateX(posicionplataformaX2);
+            //posicionplataformaX2 -= velocidad;
+            //}
             
             //LAYOUTS Y VELOCIDAD PLATAFORMAS
-            trianguloArriba -= velocidadCubo;
-            trianguloDerecha -= velocidadCubo;
-            trianguloIzquierda -= velocidadCubo;
+            trianguloArriba -= velocidad;
+            trianguloDerecha -= velocidad;
+            trianguloIzquierda -= velocidad;
             triangulo.setLayoutX(trianguloArriba);
             triangulo.setLayoutX(trianguloDerecha);
             triangulo.setLayoutX(trianguloIzquierda);
             
-            trianguloArriba2 -= velocidadCubo;
-            trianguloDerecha2 -= velocidadCubo;
-            trianguloIzquierda2 -= velocidadCubo;
+            trianguloArriba2 -= velocidad;
+            trianguloDerecha2 -= velocidad;
+            trianguloIzquierda2 -= velocidad;
             triangulo2.setLayoutX(trianguloArriba2);
             triangulo2.setLayoutX(trianguloDerecha2);
             triangulo2.setLayoutX(trianguloIzquierda2);
+            
+            //Bandera Victoria
+            BanderaView.setLayoutX(BanderaX);
+            BanderaX+= velocidadFondo;
+            if (posicionCuboX >= BanderaX+120){
+               Victoria();
+            }
             
             //MOVIMIENTO INFINITO PANTALLA
                 fondoView.setLayoutX(fondox);
@@ -259,6 +308,8 @@ public class App extends Application {
                 if (fondo2x <= -800) {
                     fondo2x = 800;
                 }
+        
+                
          //DISTANCIA MAXIMA
         if (Distancia > DistanciaMaxima){
                     DistanciaMaxima = Distancia;
@@ -290,8 +341,10 @@ public class App extends Application {
             //posicionCuboYMovimiento= 0;
         //}
         
+        
+        
         //Colison SUELO
-        Shape shapeSuelo = Shape.intersect(Suelo, cubo);
+        Shape shapeSuelo = Shape.intersect(Suelo, lineaYAbajo);
         boolean colisionSuelo = shapeSuelo.getBoundsInLocal().isEmpty();
         if (colisionSuelo == false && (Sueloboolean == true)){
             posicionCuboY = SueloY-50;
@@ -344,7 +397,9 @@ public class App extends Application {
                     Sueloboolean = false;
                     }
                     break;
-                
+                case ENTER:
+                    Reinicio();
+                break;
             }
         });
 
@@ -355,7 +410,8 @@ public class App extends Application {
     }
 // VOID DE REINICIO
     private void Reinicio() {
-    velocidadCubo = 3;
+        Muerte.play();
+    velocidad = 3;
     posicionCuboX = 100;
     posicionCuboY = 535;
     movimientoCuboX = 0;
@@ -372,16 +428,54 @@ public class App extends Application {
     posicionplataformaX= 450;
     posicionplataformaY= 450;
     posicionplataformaX2= 550;
-    posicionplataformaY2= 550;
+    posicionplataformaY2= 525;
     trianguloArriba = 450.0;
     trianguloDerecha = 480.0;
     trianguloIzquierda = 420.0;
-    trianguloArriba2 = 550.0;
-    trianguloDerecha2 = 580.0;
-    trianguloIzquierda2 = 520.0;
-    Distancia = 0;   
+    trianguloArriba2 = 650.0;
+    trianguloDerecha2 = 680.0;
+    trianguloIzquierda2 = 620.0;
+    Distancia = 0;  
+    
     musicaFondo.stop();
-    musicaFondo.play(); 
+    musicaFondo.play();
+    BanderaX = 1300;
+    }
+    
+    //VOID DE VICTORIA
+    private void Victoria() {
+        Victoria.play();
+    velocidad = 3;
+    posicionCuboX = 100;
+    posicionCuboY = 535;
+    movimientoCuboX = 0;
+    movimientoCuboY = 0;
+    fondox = 0;
+    fondo2x = 800;
+    posicionCuboYMovimiento = 0;
+    posicionlineaYAbajo = 50;
+    posicionlineaYArriba = 50;
+    posicionlineaXIzquierda = 50;
+    posicionlineaXDerecha = 50;
+    ancho_Pantalla= 800;
+    velocidadFondo = -2;
+    posicionplataformaX= 450;
+    posicionplataformaY= 450;
+    posicionplataformaX2= 550;
+    posicionplataformaY2= 525;
+    trianguloArriba = 450.0;
+    trianguloDerecha = 480.0;
+    trianguloIzquierda = 420.0;
+    trianguloArriba2 = 650.0;
+    trianguloDerecha2 = 680.0;
+    trianguloIzquierda2 = 620.0;
+    Distancia = 0;  
+    
+    musicaFondo.stop();
+    musicaFondo.play();
+    BanderaX = 1300;
+    
+    
     }
     
     
