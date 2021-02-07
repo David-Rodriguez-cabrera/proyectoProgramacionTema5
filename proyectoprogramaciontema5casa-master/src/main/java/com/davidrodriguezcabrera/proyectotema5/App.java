@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.media.AudioClip;
 /**
  * JavaFX App
  */
@@ -57,6 +58,7 @@ public class App extends Application {
     boolean encimaDEPlataforma;
     int SueloY= 585;
     boolean Sueloboolean = true;
+    AudioClip musicaFondo;
     @Override
     public void start(Stage stage) {
         
@@ -167,6 +169,17 @@ public class App extends Application {
         textHighScore.setFont(Font.font(TEXT_SIZE));
         textHighScore.setFill(Color.WHITE);
         
+        //SONIDO FONDO JUEGO
+        URL urlmusicaFondo = getClass().getResource("/audio/GEOMETRY-DASH.mp3");
+        if(urlmusicaFondo != null) {
+            try {
+                musicaFondo = new AudioClip(urlmusicaFondo.toURI().toString());
+                musicaFondo.play();
+            } catch (URISyntaxException ex) {
+            }            
+        } else {
+        System.out.println("No se ha encontrado el archivo de audio");
+        }
         
         //FONDO
         root.getChildren().add(fondoView);
@@ -277,21 +290,6 @@ public class App extends Application {
             //posicionCuboYMovimiento= 0;
         //}
         
-        
-        
-        //MUSICA
-        //URL urlAudio = getClass().getResource("/audio/GEOMETRY-DASH.m4a");
-//if(urlAudio != null) {
-    //try {
-        //AudioClip audioClip1 = new AudioClip(urlAudio.toURI().toString());
-        //audioClip1.play();
-    //} catch (URISyntaxException ex) {
-        //System.out.println("Error en el formato de ruta de archivo de audio");
-    //}            
-//} else {
-    //System.out.println("No se ha encontrado el archivo de audio");
-//}
-        
         //Colison SUELO
         Shape shapeSuelo = Shape.intersect(Suelo, cubo);
         boolean colisionSuelo = shapeSuelo.getBoundsInLocal().isEmpty();
@@ -382,7 +380,8 @@ public class App extends Application {
     trianguloDerecha2 = 580.0;
     trianguloIzquierda2 = 520.0;
     Distancia = 0;   
-               
+    musicaFondo.stop();
+    musicaFondo.play(); 
     }
     
     
