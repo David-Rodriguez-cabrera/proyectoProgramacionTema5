@@ -393,7 +393,7 @@ public class App extends Application {
             switch(event.getCode()){
                 case SPACE:
                     //System.out.println(posicionCuboYMovimiento);
-                    if (posicionCuboYMovimiento== 0 && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
+                    if (posicionCuboYMovimiento== 0){
                     movimientoCuboY -=10;
                     Sueloboolean = false;
                     }
