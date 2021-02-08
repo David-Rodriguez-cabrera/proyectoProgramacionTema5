@@ -360,7 +360,7 @@ public class App extends Application {
             posicionCuboYMovimiento =-4;
             Salto -= 4;
             posicionCuboY += posicionCuboYMovimiento;
-            System.out.println(posicionCuboYMovimiento);
+            //System.out.println(posicionCuboYMovimiento);
         }
         //CAIDA
         else{
