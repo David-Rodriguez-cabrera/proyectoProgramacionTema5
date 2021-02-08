@@ -55,13 +55,13 @@ public class App extends Application {
     final int TEXT_SIZE = 24;
     int Distancia = 0;
     int DistanciaMaxima = 0;
-    boolean encimaDEPlataforma;
     int SueloY= 585;
     boolean Sueloboolean = true;
     AudioClip musicaFondo;
     AudioClip Muerte;
     AudioClip Victoria;
     int BanderaX = 1300;
+    int Salto = 0;
     @Override
     public void start(Stage stage) {
         //PANEL ROOT
@@ -324,13 +324,16 @@ public class App extends Application {
        
         
         // SALTO
-        if (posicionCuboY > 360 && movimientoCuboY == -10){
+        if (Salto >= -190 && movimientoCuboY == -10){
             posicionCuboYMovimiento =-4;
+            Salto -= 4;
             posicionCuboY += posicionCuboYMovimiento;
+            System.out.println(posicionCuboYMovimiento);
         }
         //CAIDA
         else{
             movimientoCuboY = 0;
+            Salto = 0;
             posicionCuboYMovimiento = 4;
             posicionCuboY += posicionCuboYMovimiento;
             Sueloboolean = true;
@@ -349,19 +352,17 @@ public class App extends Application {
         if (colisionSuelo == false && (Sueloboolean == true)){
             posicionCuboY = SueloY-50;
             posicionCuboYMovimiento= 0;
+            Salto = 0;
         }
 
         //COLISON PLATAFORMA ARRIBA
         Shape shapeColisonPlataformaY = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVaciaPlataformaY = shapeColisonPlataformaY.getBoundsInLocal().isEmpty();
-            if(colisionVaciaPlataformaY == false && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
+            if(colisionVaciaPlataformaY == false && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY && (Sueloboolean == true)){
                 //posicionCuboYMovimiento = 0;
                 //posicionCuboY = posicionCuboYMovimiento;
                 posicionCuboY = posicionplataformaY-50;
                 posicionCuboYMovimiento= 0;
-                movimientoCuboY = 0;
-                encimaDEPlataforma = false;
-                 System.out.println(movimientoCuboY);
                 
             }
             
@@ -392,7 +393,7 @@ public class App extends Application {
             switch(event.getCode()){
                 case SPACE:
                     //System.out.println(posicionCuboYMovimiento);
-                    if (posicionCuboYMovimiento== 0){
+                    if (posicionCuboYMovimiento== 0 && (posicionlineaYAbajo+posicionplataformaY -50) == posicionplataformaY){
                     movimientoCuboY -=10;
                     Sueloboolean = false;
                     }
