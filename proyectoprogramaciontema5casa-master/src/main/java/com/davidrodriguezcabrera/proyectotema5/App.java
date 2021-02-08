@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.AudioClip;
+import javafx.scene.shape.Circle;
 /**
  * JavaFX App
  */
@@ -44,7 +45,7 @@ public class App extends Application {
     int velocidadFondo = -2;
     int posicionplataformaX= 450;
     int posicionplataformaY= 450;
-    int posicionplataformaX2= 550;
+    int posicionplataformaX2= 650;
     int posicionplataformaY2= 525;
     double trianguloArriba = 450.0;
     double trianguloDerecha = 480.0;
@@ -61,14 +62,22 @@ public class App extends Application {
     AudioClip Muerte;
     AudioClip Victoria;
     int BanderaX = 1300;
+    int MonedaX = 800;
+    int MonedaY = 300;
+    double zonaMonedaX = 412.5;
+    int zonaMonedaY = 325;
     int Salto = 0;
     Timeline animationCubo;
-    Pane root = new Pane();
-    Text textTitleWin = new Text("YOU WIN");
+    Pane root;
+    Text textTitleWin;
+    Circle CirculoMoneda;
+    Image Moneda;
+    ImageView MonedaView;
+    ImageView BanderaView;
     @Override
     public void start(Stage stage) {
         //PANEL ROOT
-        
+        root = new Pane();
         Scene scene = new Scene(root, ancho_Pantalla, 600);
         stage.setTitle("GEOMETRY DASH");
         stage.setScene(scene);
@@ -91,19 +100,43 @@ public class App extends Application {
         boca.setFill(Color.BLUE);
         
         //PRIMERA IMAGEN FONDO
-        Image fondo = new Image(getClass().getResourceAsStream("/images/grid_bg.png"));
+        Image fondo = new Image(getClass().getResourceAsStream("/images/fondo.png"));
         ImageView fondoView = new ImageView(fondo);
         fondoView.setLayoutX(fondox);
         
         //SEGUNDA IMAGEN FONDO
-        Image fondo2 = new Image(getClass().getResourceAsStream("/images/grid_bg.png"));
+        Image fondo2 = new Image(getClass().getResourceAsStream("/images/fondo.png"));
         ImageView fondo2View = new ImageView(fondo2);
         fondo2View.setLayoutX(fondo2x);
         
         //Bandera España
         Image Bandera = new Image(getClass().getResourceAsStream("/images/Bandera.png"));
-        ImageView BanderaView = new ImageView(Bandera);
+        BanderaView = new ImageView(Bandera);
         BanderaView.setLayoutX(BanderaX);
+        BanderaView.setLayoutY(-50);
+        
+        //Moneda
+        Moneda = new Image(getClass().getResourceAsStream("/images/Coin.png"));
+        MonedaView = new ImageView(Moneda);
+        MonedaView.setLayoutX(MonedaX);
+        MonedaView.setLayoutY(MonedaY);
+        MonedaView.setFitWidth(50);
+        MonedaView.setFitHeight(50);
+        
+        //Zona moneda
+        CirculoMoneda = new Circle(zonaMonedaX,zonaMonedaY,25);
+        CirculoMoneda.setFill(Color.BLACK);
+        CirculoMoneda.setVisible(false);
+        
+        //MonedaCogida
+        //MonedaCogida = new Image(getClass().getResourceAsStream("/images/Coin.png"));
+        //MonedaCogidaView = new ImageView(MonedaCogida);
+        //MonedaCogidaView.setLayoutX(20);
+        //MonedaCogidaView.setLayoutY(30);
+        //MonedaCogidaView.setFitWidth(30);
+        //MonedaCogidaView.setFitHeight(30);
+        //MonedaCogidaView.setVisible(false);
+        
         
         //PRIMERA PLATAFORMA
         Rectangle plataforma = new Rectangle(posicionplataformaX,posicionplataformaY,60,60);
@@ -215,10 +248,12 @@ public class App extends Application {
         System.out.println("No se ha encontrado el archivo de audio");
         }
         
-        //FONDO
+        //FONDO Y Imagenes
         root.getChildren().add(fondoView);
         root.getChildren().add(fondo2View);
         root.getChildren().add(BanderaView);
+        root.getChildren().add(MonedaView);
+        root.getChildren().add(CirculoMoneda);
         
         // AÑADIR LOS TEXTOS A LOS LAYOUTS RESERVADOS PARA ELLOS
         root.getChildren().add(paneScores);
@@ -299,6 +334,13 @@ public class App extends Application {
                Victoria();
             }
             
+            //Moneda
+            MonedaView.setLayoutX(MonedaX);
+            CirculoMoneda.setLayoutX(zonaMonedaX);
+            
+            MonedaX+= velocidadFondo;
+            zonaMonedaX+= velocidadFondo;
+            
             //MOVIMIENTO INFINITO PANTALLA
                 fondoView.setLayoutX(fondox);
                 fondox+= velocidadFondo;
@@ -358,7 +400,25 @@ public class App extends Application {
             posicionCuboYMovimiento= 0;
             Salto = 0;
         }
-
+        
+        
+        
+        
+        
+        //Colison Moneda
+        Shape shapeMoneda = Shape.intersect(CirculoMoneda, lineaYAbajo);
+                boolean colisionMoneda = shapeMoneda.getBoundsInLocal().isEmpty();
+                if (colisionMoneda == false){
+                    //MonedaCogida
+        Image MonedaCogida = new Image(getClass().getResourceAsStream("/images/Coin.png"));
+        ImageView MonedaCogidaView = new ImageView(MonedaCogida);
+        MonedaCogidaView.setLayoutX(20);
+        MonedaCogidaView.setLayoutY(30);
+        MonedaCogidaView.setFitWidth(30);
+        MonedaCogidaView.setFitHeight(30);
+        root.getChildren().add(MonedaCogidaView);
+        MonedaView.setVisible(false);
+                }
         //COLISON PLATAFORMA ARRIBA
         Shape shapeColisonPlataformaY = Shape.intersect(plataforma, lineaYAbajo);
             boolean colisionVaciaPlataformaY = shapeColisonPlataformaY.getBoundsInLocal().isEmpty();
@@ -372,17 +432,45 @@ public class App extends Application {
             
             
             //COLISON PLATAFORMA LADOS
-            Shape shapeColisonPlataformaX = Shape.intersect(plataforma, lineaXDerecha);
+            Shape shapeColisonPlataformaX = Shape.intersect(plataforma2, lineaXDerecha);
             boolean colisionVaciaPlataformaX = shapeColisonPlataformaX.getBoundsInLocal().isEmpty();
             if(colisionVaciaPlataformaX == false && (posicionlineaXDerecha+posicionplataformaX -50) == posicionplataformaX){
-                Reinicio();
+                Muerte();
             }
+            
+            //COLISON PLATAFORMA2 ARRIBA
+        Shape shapeColisonPlataformaY2 = Shape.intersect(plataforma2, lineaYAbajo);
+            boolean colisionVaciaPlataformaY2 = shapeColisonPlataformaY2.getBoundsInLocal().isEmpty();
+            if(colisionVaciaPlataformaY2 == false && (posicionlineaYAbajo+posicionplataformaY2 -50) == posicionplataformaY2 && (Sueloboolean == true)){
+                //posicionCuboYMovimiento = 0;
+                //posicionCuboY = posicionCuboYMovimiento;
+                posicionCuboY = posicionplataformaY2-50;
+                posicionCuboYMovimiento= 0;
+                
+            }
+            
+            
+            //COLISON PLATAFORMA2 LADOS
+            Shape shapeColisonPlataformaX2 = Shape.intersect(plataforma, lineaXDerecha);
+            boolean colisionVaciaPlataformaX2 = shapeColisonPlataformaX2.getBoundsInLocal().isEmpty();
+            if(colisionVaciaPlataformaX2 == false && (posicionlineaXDerecha+posicionplataformaX2 -50) == posicionplataformaX2){
+                Muerte();
+            }
+            
             
         //COLISION TRIANGULO MUERTE
         Shape shapeColisonMuerte = Shape.intersect(triangulo, cubo);
         boolean colisionMuerte = shapeColisonMuerte.getBoundsInLocal().isEmpty();
         if(colisionMuerte == false){
-        Reinicio();
+            
+        Muerte();
+            }
+        
+        //COLISION TRIANGULO2 MUERTE
+        Shape shapeColisonMuerte2 = Shape.intersect(triangulo2, cubo);
+        boolean colisionMuerte2 = shapeColisonMuerte2.getBoundsInLocal().isEmpty();
+        if(colisionMuerte2 == false){
+        Muerte();
             }
         
         
@@ -403,7 +491,13 @@ public class App extends Application {
                     }
                     break;
                 case ENTER:
-                    Reinicio();
+                   if (posicionCuboX >= BanderaX+120){
+               Reinicio();
+            } 
+                   else {
+                       Muerte();
+                   }
+            
                 break;
             }
         });
@@ -415,6 +509,48 @@ public class App extends Application {
     }
 // VOID DE REINICIO
     private void Reinicio() {
+        animationCubo.play();
+        musicaFondo.play();
+    velocidad = 3;
+    posicionCuboX = 100;
+    posicionCuboY = 535;
+    movimientoCuboX = 0;
+    movimientoCuboY = 0;
+    fondox = 0;
+    fondo2x = 800;
+    posicionCuboYMovimiento = 0;
+    posicionlineaYAbajo = 50;
+    posicionlineaYArriba = 50;
+    posicionlineaXIzquierda = 50;
+    posicionlineaXDerecha = 50;
+    ancho_Pantalla= 800;
+    velocidadFondo = -2;
+    posicionplataformaX= 450;
+    posicionplataformaY= 450;
+    posicionplataformaX2= 650;
+    posicionplataformaY2= 525;
+    trianguloArriba = 450.0;
+    trianguloDerecha = 480.0;
+    trianguloIzquierda = 420.0;
+    trianguloArriba2 = 650.0;
+    trianguloDerecha2 = 680.0;
+    trianguloIzquierda2 = 620.0;
+    Distancia = 0;
+    SueloY= 585;
+    Sueloboolean = true;
+    BanderaX = 1300;
+    MonedaX = 800;
+    MonedaY = 300;
+    zonaMonedaX = 412.5;
+    zonaMonedaY = 325;
+    Salto = 0;
+    
+    textTitleWin.setVisible(false);
+    MonedaView.setVisible(true);
+    }
+    
+    // VOID DE REINICIO
+    private void Muerte() {
         animationCubo.play();
         Muerte.play();
     velocidad = 3;
@@ -433,7 +569,7 @@ public class App extends Application {
     velocidadFondo = -2;
     posicionplataformaX= 450;
     posicionplataformaY= 450;
-    posicionplataformaX2= 550;
+    posicionplataformaX2= 650;
     posicionplataformaY2= 525;
     trianguloArriba = 450.0;
     trianguloDerecha = 480.0;
@@ -441,22 +577,25 @@ public class App extends Application {
     trianguloArriba2 = 650.0;
     trianguloDerecha2 = 680.0;
     trianguloIzquierda2 = 620.0;
-    Distancia = 0;  
-    
-    //musicaFondo.stop();
-    musicaFondo.play();
-    BanderaX = 1300;
+    Distancia = 0;
     SueloY= 585;
     Sueloboolean = true;
+    BanderaX = 1300;
+    MonedaX = 800;
+    MonedaY = 300;
+    zonaMonedaX = 412.5;
+    zonaMonedaY = 325;
+    Salto = 0; 
     
-    
-    Salto = 0;
-    textTitleWin.setVisible(false);
+    musicaFondo.stop();
+    musicaFondo.play();
+    MonedaView.setVisible(true);
     }
     
     //VOID DE VICTORIA
     private void Victoria() {
         animationCubo.stop();
+        musicaFondo.stop();
         Victoria.play();
     //TEXTOS DISTANCIA Y DISTANCIA MAXIMA
         HBox paneWin = new HBox();
@@ -471,7 +610,7 @@ public class App extends Application {
         
         
         // TEXTO DE ETIQUETA PARA DISTANCIA
-        
+        textTitleWin = new Text("YOU WIN");
         textTitleWin.setFont(Font.font(180));
         textTitleWin.setFill(Color.BLUE);
         textTitleWin.setVisible(true);
