@@ -313,10 +313,10 @@ public class App extends Application {
                 }
         
          //DISTANCIA
-        if (fondox> -900){
+        
             Distancia += 1;
             textScore.setText(String.valueOf(Distancia));
-        }
+        
                 
          //DISTANCIA MAXIMA
         if (Distancia > DistanciaMaxima){
