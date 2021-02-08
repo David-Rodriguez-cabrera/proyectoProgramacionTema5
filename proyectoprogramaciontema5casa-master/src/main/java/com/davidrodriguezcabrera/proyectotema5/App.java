@@ -62,10 +62,13 @@ public class App extends Application {
     AudioClip Victoria;
     int BanderaX = 1300;
     int Salto = 0;
+    Timeline animationCubo;
+    Pane root = new Pane();
+    Text textTitleWin = new Text("YOU WIN");
     @Override
     public void start(Stage stage) {
         //PANEL ROOT
-        Pane root = new Pane();
+        
         Scene scene = new Scene(root, ancho_Pantalla, 600);
         stage.setTitle("GEOMETRY DASH");
         stage.setScene(scene);
@@ -250,7 +253,7 @@ public class App extends Application {
         root.getChildren().add(Suelo);
         //TIMELINE
         
-        Timeline animationCubo = new Timeline(
+        animationCubo = new Timeline(
         new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) ->{
             //TRANSLATE PERSONAJE
         groupPersonaje.setTranslateX(posicionCuboX);
@@ -309,17 +312,18 @@ public class App extends Application {
                     fondo2x = 800;
                 }
         
+         //DISTANCIA
+        if (fondox> -900){
+            Distancia += 1;
+            textScore.setText(String.valueOf(Distancia));
+        }
                 
          //DISTANCIA MAXIMA
         if (Distancia > DistanciaMaxima){
                     DistanciaMaxima = Distancia;
                     textHighScore.setText(String.valueOf(DistanciaMaxima));
                 }
-        //DISTANCIA
-        if (fondox> -900){
-            Distancia += 1;
-            textScore.setText(String.valueOf(Distancia));
-        }
+        
         //System.out.println(Distancia);
        
         
@@ -411,6 +415,7 @@ public class App extends Application {
     }
 // VOID DE REINICIO
     private void Reinicio() {
+        animationCubo.play();
         Muerte.play();
     velocidad = 3;
     posicionCuboX = 100;
@@ -438,45 +443,44 @@ public class App extends Application {
     trianguloIzquierda2 = 620.0;
     Distancia = 0;  
     
-    musicaFondo.stop();
+    //musicaFondo.stop();
     musicaFondo.play();
     BanderaX = 1300;
+    SueloY= 585;
+    Sueloboolean = true;
+    
+    
+    Salto = 0;
+    textTitleWin.setVisible(false);
     }
     
     //VOID DE VICTORIA
     private void Victoria() {
+        animationCubo.stop();
         Victoria.play();
-    velocidad = 3;
-    posicionCuboX = 100;
-    posicionCuboY = 535;
-    movimientoCuboX = 0;
-    movimientoCuboY = 0;
-    fondox = 0;
-    fondo2x = 800;
-    posicionCuboYMovimiento = 0;
-    posicionlineaYAbajo = 50;
-    posicionlineaYArriba = 50;
-    posicionlineaXIzquierda = 50;
-    posicionlineaXDerecha = 50;
-    ancho_Pantalla= 800;
-    velocidadFondo = -2;
-    posicionplataformaX= 450;
-    posicionplataformaY= 450;
-    posicionplataformaX2= 550;
-    posicionplataformaY2= 525;
-    trianguloArriba = 450.0;
-    trianguloDerecha = 480.0;
-    trianguloIzquierda = 420.0;
-    trianguloArriba2 = 650.0;
-    trianguloDerecha2 = 680.0;
-    trianguloIzquierda2 = 620.0;
-    Distancia = 0;  
-    
-    musicaFondo.stop();
-    musicaFondo.play();
-    BanderaX = 1300;
-    
-    
+    //TEXTOS DISTANCIA Y DISTANCIA MAXIMA
+        HBox paneWin = new HBox();
+        paneWin.setTranslateY(80);
+        paneWin.setMinWidth(ancho_Pantalla);
+        paneWin.setAlignment(Pos.BASELINE_CENTER);
+        paneWin.setSpacing(100);
+        // LAYOUT PARA DISTANCIA ACTUAL
+        HBox paneCurrentWin = new HBox();
+        paneCurrentWin.setSpacing(10);
+        
+        
+        
+        // TEXTO DE ETIQUETA PARA DISTANCIA
+        
+        textTitleWin.setFont(Font.font(180));
+        textTitleWin.setFill(Color.BLUE);
+        textTitleWin.setVisible(true);
+        
+        // AÑADIR LOS TEXTOS A LOS LAYOUTS RESERVADOS PARA ELLOS
+        root.getChildren().add(paneWin);
+        paneWin.getChildren().add(paneCurrentWin);
+        paneCurrentWin.getChildren().add(textTitleWin);
+        
     }
     
     
